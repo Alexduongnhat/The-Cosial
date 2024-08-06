@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block guest %}
+<div class="tab">
+    <a href="/register" >register</a>
+    <a href="/login">log in</a>
+</div>
+{% endblock %}
+
+{% block loggin %}
+    <form action="/login" method="POST" >
+        <input type="text" name="name" placeholder="name">
+        <input type="text" name="password" placeholder="password">
+        <input type="submit" value="submit">
+    </form>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+
+{% block writer %}
+    <div class="writer">
+        <input type="text" placeholder="Write something" id="write">
+        <button id="upload_btn">Upload</button>
+
+        <script>
+            document.querySelector("#upload_btn").addEventListener("click", function() {
+                const value = document.querySelector("#write").value;
+                fetch('/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ inputValue: value })
+                
+                });
+            })
+        </script>
+    </div>
+    <div id="feeds"></div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetchMoreContent();
+        });
+
+        function fetchMoreContent() {
+            const value = document.querySelector("#write").value;
+            fetch('/newload', {
+                method: 'POST',
+                body: JSON.stringify({ value: value }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.text())
+            .then(html => {
+                if (html === "no more") {
+                    document.getElementById("feeds").innerHTML += html;
+                    noMorecontent = true;
+                } else {
+                    document.getElementById("feeds").innerHTML = html;
+                }
+            });
+        }
+
+        window.onscroll = function() {
+            if (window.scrollY > document.documentElement.scrollHeight / 2 && !noMorecontent)
+                fetchMoreContent();
+        };
+    </script>
+{% endblock %}
